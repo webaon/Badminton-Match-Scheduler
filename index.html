@@ -43,8 +43,9 @@
             <aside class="panel settings-panel">
                 <div class="panel-header">
                     <h2>⚙️ ตั้งค่าการแข่งขัน</h2>
+                    <button class="panel-collapse-btn" onclick="toggleSettingsPanel()" title="ซ่อน">✕</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="settingsPanelBody">
                     <!-- Match Type -->
                     <div class="form-group">
                         <label>ประเภทการแข่ง</label>
@@ -446,6 +447,12 @@
         <!-- Floating Timer Toggle Button -->
         <button class="rental-timer-toggle" id="rentalTimerToggle" onclick="openRentalTimer()" title="เวลาเช่าคอร์ท">
             ⏱️
+        </button>
+
+        <!-- Floating Settings Toggle Button -->
+        <button class="settings-toggle-btn" id="settingsToggleBtn" onclick="showSettingsPanel()" title="เปิดตั้งค่า"
+            style="display: none;">
+            ⚙️
         </button>
 
         <!-- Toast Container -->

@@ -115,6 +115,40 @@ function adjustCourts(delta) {
     saveSetting('courtCount', newValue);
 }
 
+function toggleSettingsPanel() {
+    const mainContent = document.querySelector('.main-content');
+    const panel = document.querySelector('.settings-panel');
+    const toggleBtn = document.getElementById('settingsToggleBtn');
+
+    if (mainContent && panel) {
+        const isHidden = panel.style.display === 'none';
+
+        if (isHidden) {
+            // Show panel
+            panel.style.display = 'flex';
+            mainContent.classList.remove('settings-collapsed');
+            if (toggleBtn) toggleBtn.style.display = 'none';
+        } else {
+            // Hide panel
+            panel.style.display = 'none';
+            mainContent.classList.add('settings-collapsed');
+            if (toggleBtn) toggleBtn.style.display = 'flex';
+        }
+    }
+}
+
+function showSettingsPanel() {
+    const mainContent = document.querySelector('.main-content');
+    const panel = document.querySelector('.settings-panel');
+    const toggleBtn = document.getElementById('settingsToggleBtn');
+
+    if (mainContent && panel) {
+        panel.style.display = 'flex';
+        mainContent.classList.remove('settings-collapsed');
+        if (toggleBtn) toggleBtn.style.display = 'none';
+    }
+}
+
 // ============================================
 // Player Management
 // ============================================
