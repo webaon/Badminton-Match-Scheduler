@@ -801,6 +801,14 @@ function showPlayerStats() {
     modal.classList.add('show');
 }
 
+function showPairingInfo() {
+    document.getElementById('pairingInfoModal').classList.add('show');
+}
+
+function showMultiCourtInfo() {
+    document.getElementById('multiCourtInfoModal').classList.add('show');
+}
+
 // ============================================
 // Score & Timer Functions
 // ============================================

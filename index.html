@@ -58,7 +58,8 @@
 
                     <!-- Pairing Mode -->
                     <div class="form-group">
-                        <label>รูปแบบจับคู่</label>
+                        <label>รูปแบบจับคู่ <button class="info-btn" onclick="showPairingInfo()"
+                                title="ดูเงื่อนไข">ℹ️</button></label>
                         <select id="pairingMode" onchange="saveSetting('pairingMode', this.value)">
                             <option value="random">🎲 สุ่มทั้งหมด</option>
                             <option value="balanced">⚖️ ผสมให้สมดุล</option>
@@ -81,7 +82,8 @@
                     <div class="form-group">
                         <label>
                             <input type="checkbox" id="multiCourt" onchange="saveSetting('multiCourt', this.checked)">
-                            อนุญาตลงหลายคอร์ทพร้อมกัน
+                            อนุญาตลงหลายคอร์ทพร้อมกัน <button class="info-btn"
+                                onclick="event.preventDefault(); showMultiCourtInfo()" title="ดูเงื่อนไข">ℹ️</button>
                         </label>
                     </div>
 
@@ -317,6 +319,96 @@
                     <button class="modal-close" onclick="closeModal('playerHistoryModal')">&times;</button>
                 </div>
                 <div class="modal-body" id="playerHistoryContent">
+                </div>
+            </div>
+        </div>
+
+        <!-- Pairing Info Modal -->
+        <div class="modal" id="pairingInfoModal">
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <h2>📖 เงื่อนไขรูปแบบจับคู่</h2>
+                    <button class="modal-close" onclick="closeModal('pairingInfoModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="pairing-info-content">
+                        <div class="pairing-info-section">
+                            <h3>🎲 สุ่มทั้งหมด (Random)</h3>
+                            <ul>
+                                <li>สุ่มผู้เล่นแบบไม่มีเงื่อนไข</li>
+                                <li>ผู้เล่นทุกคนมีโอกาสจับคู่กับใครก็ได้</li>
+                                <li>เหมาะกับเกมสนุกๆ ไม่เน้นความสมดุล</li>
+                            </ul>
+                        </div>
+                        <hr class="divider">
+                        <div class="pairing-info-section">
+                            <h3>⚖️ ผสมให้สมดุล (Balanced)</h3>
+                            <p><strong>ประเภทเดี่ยว:</strong></p>
+                            <ul>
+                                <li>จับคู่ผู้เล่นที่มีระดับใกล้เคียงกัน</li>
+                            </ul>
+                            <p><strong>ประเภทคู่:</strong></p>
+                            <ul>
+                                <li>จับคู่ ผู้เล่นเก่ง + ผู้เล่นอ่อน เป็นทีมเดียวกัน</li>
+                                <li>ทำให้ทั้งสองทีมมีความสมดุล</li>
+                            </ul>
+                            <div class="level-weights">
+                                <p><strong>ค่าน้ำหนักระดับ:</strong></p>
+                                <span class="level-badge beginner">🟢 มือใหม่ = 1</span>
+                                <span class="level-badge intermediate">🟡 ปานกลาง = 2</span>
+                                <span class="level-badge advanced">🟠 ขั้นสูง = 3</span>
+                                <span class="level-badge pro">🔴 โปร = 4</span>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="pairing-info-section">
+                            <h3>🔀 แยกตามฝีมือ (Separate)</h3>
+                            <ul>
+                                <li>จัดกลุ่มผู้เล่นตามระดับ (โปร → ขั้นสูง → ปานกลาง → มือใหม่)</li>
+                                <li>สุ่มภายในแต่ละกลุ่ม แล้วจับคู่ตามลำดับ</li>
+                                <li>ผู้เล่นระดับเดียวกันได้แข่งกัน</li>
+                            </ul>
+                        </div>
+                        <hr class="divider">
+                        <div class="pairing-info-section note">
+                            <h3>📌 หมายเหตุ</h3>
+                            <ul>
+                                <li>ทุกรูปแบบจะให้ความสำคัญกับผู้เล่นที่แข่งน้อยครั้งก่อน</li>
+                                <li><strong>ประเภทคู่:</strong> ต้องการ 4 คนต่อแมตช์</li>
+                                <li><strong>ประเภทเดี่ยว:</strong> ต้องการ 2 คนต่อแมตช์</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Multi Court Info Modal -->
+        <div class="modal" id="multiCourtInfoModal">
+            <div class="modal-content modal-sm">
+                <div class="modal-header">
+                    <h2>🏟️ อนุญาตลงหลายคอร์ทพร้อมกัน</h2>
+                    <button class="modal-close" onclick="closeModal('multiCourtInfoModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="pairing-info-content">
+                        <div class="pairing-info-section" style="border-left-color: var(--success);">
+                            <h3>✅ เมื่อเปิด</h3>
+                            <ul>
+                                <li>ผู้เล่นสามารถลงแข่งหลายคอร์ทพร้อมกันได้</li>
+                                <li>เหมาะกับกรณีที่มีผู้เล่นน้อยแต่มีหลายคอร์ท</li>
+                            </ul>
+                        </div>
+                        <hr class="divider">
+                        <div class="pairing-info-section" style="border-left-color: var(--danger);">
+                            <h3>❌ เมื่อปิด (ค่าเริ่มต้น)</h3>
+                            <ul>
+                                <li>ผู้เล่นสามารถลงแข่งได้เพียงคอร์ทเดียว</li>
+                                <li>ถ้ากำลังเล่นอยู่ จะไม่ถูกเลือกให้ลงแมตช์ใหม่</li>
+                                <li>เหมาะกับการแข่งขันปกติ</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

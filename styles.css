@@ -1598,3 +1598,121 @@ body {
         print-color-adjust: exact !important;
     }
 }
+
+/* ============================================
+   Info Button
+   ============================================ */
+.info-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    vertical-align: middle;
+    transition: all var(--transition-fast);
+    border-radius: 50%;
+}
+
+.info-btn:hover {
+    background: var(--bg-hover);
+    transform: scale(1.1);
+}
+
+/* ============================================
+   Pairing Info Modal
+   ============================================ */
+.modal-md {
+    max-width: 550px;
+}
+
+.pairing-info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pairing-info-section {
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-primary);
+}
+
+.pairing-info-section.note {
+    border-left-color: var(--warning);
+    background: rgba(253, 203, 110, 0.1);
+}
+
+.pairing-info-section h3 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.pairing-info-section p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.pairing-info-section ul {
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+.pairing-info-section li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+    line-height: 1.5;
+}
+
+.pairing-info-section li:last-child {
+    margin-bottom: 0;
+}
+
+.level-weights {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+}
+
+.level-weights p {
+    margin-bottom: 0.5rem;
+}
+
+.level-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin: 0.25rem 0.25rem 0.25rem 0;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+.level-badge.beginner {
+    border-color: var(--level-beginner);
+    color: var(--level-beginner);
+}
+
+.level-badge.intermediate {
+    border-color: var(--level-intermediate);
+    color: var(--level-intermediate);
+}
+
+.level-badge.advanced {
+    border-color: var(--level-advanced);
+    color: var(--level-advanced);
+}
+
+.level-badge.pro {
+    border-color: var(--level-pro);
+    color: var(--level-pro);
+}
