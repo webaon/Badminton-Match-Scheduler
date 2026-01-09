@@ -1,0 +1,1600 @@
+/* ============================================
+   🏸 Badminton Match Scheduler - Styles
+   ============================================ */
+
+:root {
+    /* Colors - Premium Dark Theme */
+    --bg-primary: #0f0f1a;
+    --bg-secondary: #1a1a2e;
+    --bg-tertiary: #252542;
+    --bg-card: #16162b;
+    --bg-hover: #2a2a4a;
+
+    /* Accent Colors */
+    --accent-primary: #6c5ce7;
+    --accent-secondary: #a29bfe;
+    --accent-glow: rgba(108, 92, 231, 0.3);
+
+    /* Status Colors */
+    --success: #00d9a6;
+    --success-glow: rgba(0, 217, 166, 0.3);
+    --warning: #ffeaa7;
+    --warning-dark: #e17055;
+    --danger: #ff6b6b;
+    --danger-glow: rgba(255, 107, 107, 0.3);
+    --info: #74b9ff;
+
+    /* Level Colors */
+    --level-beginner: #00b894;
+    --level-intermediate: #fdcb6e;
+    --level-advanced: #e17055;
+    --level-pro: #d63031;
+
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #b2b2cc;
+    --text-muted: #6c6c8a;
+
+    /* Borders */
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(108, 92, 231, 0.5);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 30px var(--accent-glow);
+
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Prompt', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(0, 217, 166, 0.05) 0%, transparent 50%);
+}
+
+/* App Container */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+.header {
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent-primary), var(--success));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    border: none;
+    outline: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), #5a4bd1);
+    color: white;
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 25px var(--accent-glow);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success), #00c49a);
+    color: #0a2e25;
+    box-shadow: 0 4px 15px var(--success-glow);
+}
+
+.btn-success:hover {
+    box-shadow: 0 6px 25px var(--success-glow);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-dark), #d35400);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger), #e64545);
+    color: white;
+    box-shadow: 0 4px 15px var(--danger-glow);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: var(--radius-lg);
+}
+
+.btn-toggle {
+    padding: 0.5rem 1rem;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-family: inherit;
+}
+
+.btn-toggle.active {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.btn-toggle:hover:not(.active) {
+    background: var(--bg-hover);
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon {
+    font-size: 1.1em;
+}
+
+/* ============================================
+   Main Content - Grid Layout
+   ============================================ */
+.main-content {
+    display: grid;
+    grid-template-columns: 320px 1fr 350px;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    flex: 1;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ============================================
+   Panels
+   ============================================ */
+.panel {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.panel-header {
+    padding: 1rem 1.25rem;
+    background: linear-gradient(180deg, var(--bg-tertiary) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.panel-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.panel-body {
+    padding: 1.25rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.form-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5rem;
+    accent-color: var(--accent-primary);
+}
+
+.number-input {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.number-input button {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.number-input button:first-child {
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.number-input button:last-child {
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.number-input button:hover {
+    background: var(--accent-primary);
+}
+
+.number-input input {
+    width: 60px;
+    text-align: center;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+}
+
+.add-player-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.add-player-form input {
+    flex: 1;
+}
+
+.divider {
+    border: none;
+    height: 1px;
+    background: var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* ============================================
+   Player List
+   ============================================ */
+.player-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.player-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.player-list-header h3 {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.player-stats {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.player-stats .stat-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary);
+}
+
+.player-list {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.player-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+}
+
+.player-card:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    transform: translateX(4px);
+}
+
+.player-card.playing {
+    background: linear-gradient(90deg, rgba(0, 217, 166, 0.15), transparent);
+    border-color: var(--success);
+}
+
+.player-card.resting {
+    opacity: 0.6;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.player-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+    background: var(--accent-primary);
+    color: white;
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.player-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.player-level {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.player-level.beginner {
+    color: var(--level-beginner);
+}
+
+.player-level.intermediate {
+    color: var(--level-intermediate);
+}
+
+.player-level.advanced {
+    color: var(--level-advanced);
+}
+
+.player-level.pro {
+    color: var(--level-pro);
+}
+
+.player-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.player-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-action-btn:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.player-action-btn.delete:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.player-match-count {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+}
+
+/* ============================================
+   Match Controls
+   ============================================ */
+.match-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   Courts Grid
+   ============================================ */
+.current-matches {
+    margin-bottom: 1.5rem;
+}
+
+.current-matches h3,
+.match-queue h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.courts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.court-card {
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+    padding: 1.25rem;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.court-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--border-color);
+}
+
+.court-card.playing::before {
+    background: linear-gradient(90deg, var(--success), var(--accent-primary));
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.court-card.empty {
+    border-style: dashed;
+    background: var(--bg-tertiary);
+}
+
+.court-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.court-number {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.court-status {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.court-status.playing {
+    background: rgba(0, 217, 166, 0.2);
+    color: var(--success);
+}
+
+.court-status.empty {
+    background: rgba(108, 92, 231, 0.2);
+    color: var(--accent-secondary);
+}
+
+.court-players {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.court-team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+}
+
+.court-team-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 50px;
+}
+
+.court-team-players {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.court-player {
+    padding: 0.25rem 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.court-vs {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.court-empty-message {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+    font-style: italic;
+}
+
+/* ============================================
+   Queue List
+   ============================================ */
+.match-queue {
+    margin-bottom: 1.5rem;
+}
+
+.queue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.queue-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.queue-position {
+    width: 28px;
+    height: 28px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.queue-match-info {
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.queue-teams {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.queue-type {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ============================================
+   Statistics Cards
+   ============================================ */
+.match-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.stat-card {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ============================================
+   Schedule Panel
+   ============================================ */
+.schedule-filter {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.schedule-filter select {
+    padding: 0.4rem 0.75rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.schedule-round {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.schedule-round-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-hover);
+    cursor: pointer;
+}
+
+.schedule-round-header:hover {
+    background: var(--bg-primary);
+}
+
+.schedule-round-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.schedule-round-toggle {
+    color: var(--text-muted);
+    transition: transform var(--transition-fast);
+}
+
+.schedule-round.collapsed .schedule-round-toggle {
+    transform: rotate(-90deg);
+}
+
+.schedule-round-matches {
+    padding: 0.5rem;
+}
+
+.schedule-round.collapsed .schedule-round-matches {
+    display: none;
+}
+
+.schedule-match {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    margin-bottom: 0.5rem;
+    transition: all var(--transition-fast);
+}
+
+.schedule-match:last-child {
+    margin-bottom: 0;
+}
+
+.schedule-match:hover {
+    background: var(--bg-secondary);
+}
+
+.schedule-match-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+
+.schedule-match-status.pending {
+    background: var(--text-muted);
+}
+
+.schedule-match-status.playing {
+    background: var(--success);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.schedule-match-status.completed {
+    background: var(--accent-primary);
+}
+
+.schedule-match-teams {
+    flex: 1;
+}
+
+.schedule-match-team {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.schedule-match-team+.schedule-match-team::before {
+    content: ' vs ';
+    color: var(--text-muted);
+}
+
+.schedule-match-court {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ============================================
+   Round Info
+   ============================================ */
+.round-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.round-info .separator {
+    color: var(--text-muted);
+}
+
+.round-info strong {
+    color: var(--accent-primary);
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   Modal
+   ============================================ */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    animation: modalSlide 0.3s ease;
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+.modal-body textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: monospace;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    resize: vertical;
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+.toast-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 2000;
+}
+
+.toast {
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    animation: toastSlide 0.3s ease;
+    max-width: 350px;
+}
+
+@keyframes toastSlide {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.toast.success {
+    border-color: var(--success);
+    background: linear-gradient(90deg, rgba(0, 217, 166, 0.1), var(--bg-card));
+}
+
+.toast.error {
+    border-color: var(--danger);
+    background: linear-gradient(90deg, rgba(255, 107, 107, 0.1), var(--bg-card));
+}
+
+.toast.info {
+    border-color: var(--info);
+    background: linear-gradient(90deg, rgba(116, 185, 255, 0.1), var(--bg-card));
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-hover);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 1400px) {
+    .main-content {
+        grid-template-columns: 300px 1fr 300px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-panel,
+    .schedule-panel {
+        max-height: 400px;
+    }
+
+    .match-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .match-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .match-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .courts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   Player Stats Modal Content
+   ============================================ */
+.player-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.player-stats-table th,
+.player-stats-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.player-stats-table th {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.player-stats-table tr:hover td {
+    background: var(--bg-hover);
+}
+
+/* ============================================
+   Score Modal
+   ============================================ */
+.modal-sm {
+    max-width: 450px;
+}
+
+.score-input-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.score-team {
+    flex: 1;
+    text-align: center;
+}
+
+.score-team-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.score-inputs {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.score-inputs input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.score-inputs input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.score-vs {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    padding: 0 0.5rem;
+}
+
+.score-set-labels {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.score-set-labels span {
+    width: 50px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ============================================
+   Match Timer
+   ============================================ */
+.court-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    margin-top: 0.75rem;
+    font-family: monospace;
+}
+
+.court-timer .timer-icon {
+    font-size: 1rem;
+}
+
+.court-timer .timer-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--success);
+}
+
+/* ============================================
+   Player Rest Toggle
+   ============================================ */
+.player-action-btn.rest {
+    position: relative;
+}
+
+.player-action-btn.rest.resting {
+    background: var(--warning-dark);
+    color: white;
+}
+
+.player-card.resting {
+    opacity: 0.5;
+    border-style: dashed;
+}
+
+.player-card.resting .player-avatar {
+    filter: grayscale(1);
+}
+
+.player-rest-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    background: var(--warning-dark);
+    border-radius: 50%;
+}
+
+/* ============================================
+   Clickable Stat Card
+   ============================================ */
+.stat-card[onclick] {
+    cursor: pointer;
+}
+
+.stat-card[onclick]:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ============================================
+   Enhanced Player Stats Modal
+   ============================================ */
+.player-stats-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.player-stats-summary .stat-box {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.player-stats-summary .stat-box .value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.player-stats-summary .stat-box .label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.player-stats-table .win {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.player-stats-table .loss {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* ============================================
+   Court Action Buttons
+   ============================================ */
+.court-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.court-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+/* ============================================
+   Bulk Add Modal
+   ============================================ */
+.modal-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.bulk-add-options {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.bulk-add-options label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.bulk-add-options select {
+    flex: 1;
+    padding: 0.5rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+/* ============================================
+   Player History
+   ============================================ */
+.history-player-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.history-player-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}
+
+.history-player-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.history-player-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.history-match-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-match {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.history-match.win {
+    border-left: 3px solid var(--success);
+}
+
+.history-match.loss {
+    border-left: 3px solid var(--danger);
+}
+
+.history-match-teams {
+    font-size: 0.9rem;
+}
+
+.history-match-result {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+}
+
+.history-match-result.win {
+    background: rgba(0, 217, 166, 0.2);
+    color: var(--success);
+}
+
+.history-match-result.loss {
+    background: rgba(255, 107, 107, 0.2);
+    color: var(--danger);
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .header,
+    .settings-panel,
+    .match-controls,
+    .toast-container,
+    .modal,
+    .btn,
+    .player-actions {
+        display: none !important;
+    }
+
+    .main-content {
+        display: block !important;
+        padding: 0 !important;
+    }
+
+    .panel {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        margin-bottom: 1rem !important;
+        page-break-inside: avoid;
+    }
+
+    .panel-header {
+        background: #f5f5f5 !important;
+        color: black !important;
+    }
+
+    .panel-header h2 {
+        color: black !important;
+    }
+
+    .schedule-round {
+        background: #f9f9f9 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .schedule-match {
+        background: white !important;
+        border: 1px solid #eee !important;
+    }
+
+    .court-card {
+        background: #f9f9f9 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .court-player {
+        background: #eee !important;
+        color: black !important;
+    }
+
+    .stat-card {
+        background: #f5f5f5 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    * {
+        color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

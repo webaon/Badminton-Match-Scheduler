@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏸 ระบบจัดตารางแข่งแบดมินตัน</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏸</span>
+                    <h1>Badminton Match Scheduler</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="printSchedule()">
+                        <span class="icon">🖨️</span> Print
+                    </button>
+                    <button class="btn btn-outline" onclick="exportData()">
+                        <span class="icon">📤</span> Export
+                    </button>
+                    <button class="btn btn-outline" onclick="importData()">
+                        <span class="icon">📥</span> Import
+                    </button>
+                    <button class="btn btn-danger" onclick="resetAll()">
+                        <span class="icon">🗑️</span> Reset
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel - Settings -->
+            <aside class="panel settings-panel">
+                <div class="panel-header">
+                    <h2>⚙️ ตั้งค่าการแข่งขัน</h2>
+                </div>
+                <div class="panel-body">
+                    <!-- Match Type -->
+                    <div class="form-group">
+                        <label>ประเภทการแข่ง</label>
+                        <div class="btn-group">
+                            <button class="btn-toggle active" data-type="doubles"
+                                onclick="setMatchType('doubles')">คู่</button>
+                            <button class="btn-toggle" data-type="singles"
+                                onclick="setMatchType('singles')">เดี่ยว</button>
+                        </div>
+                    </div>
+
+                    <!-- Pairing Mode -->
+                    <div class="form-group">
+                        <label>รูปแบบจับคู่</label>
+                        <select id="pairingMode" onchange="saveSetting('pairingMode', this.value)">
+                            <option value="random">🎲 สุ่มทั้งหมด</option>
+                            <option value="balanced">⚖️ ผสมให้สมดุล</option>
+                            <option value="separate">🔀 แยกตามฝีมือ</option>
+                        </select>
+                    </div>
+
+                    <!-- Courts -->
+                    <div class="form-group">
+                        <label>จำนวนคอร์ท</label>
+                        <div class="number-input">
+                            <button onclick="adjustCourts(-1)">−</button>
+                            <input type="number" id="courtCount" value="2" min="1" max="10"
+                                onchange="saveSetting('courtCount', this.value)">
+                            <button onclick="adjustCourts(1)">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Players per match on multiple courts -->
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="multiCourt" onchange="saveSetting('multiCourt', this.checked)">
+                            อนุญาตลงหลายคอร์ทพร้อมกัน
+                        </label>
+                    </div>
+
+                    <hr class="divider">
+
+                    <!-- Add Player -->
+                    <div class="form-group">
+                        <label>เพิ่มผู้เล่น</label>
+                        <div class="add-player-form">
+                            <input type="text" id="playerName" placeholder="ชื่อผู้เล่น"
+                                onkeypress="handlePlayerKeypress(event)">
+                            <select id="playerLevel">
+                                <option value="beginner">🟢 มือใหม่</option>
+                                <option value="intermediate">🟡 ปานกลาง</option>
+                                <option value="advanced">🟠 ขั้นสูง</option>
+                                <option value="pro">🔴 โปร</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="addPlayer()">
+                                <span class="icon">➕</span> เพิ่ม
+                            </button>
+                            <button class="btn btn-outline" onclick="openBulkAddModal()" title="เพิ่มหลายคน">
+                                <span class="icon">👥</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Player List -->
+                    <div class="player-list-container">
+                        <div class="player-list-header">
+                            <h3>👥 รายชื่อผู้เล่น (<span id="playerCount">0</span>)</h3>
+                            <div class="player-stats" id="playerStats"></div>
+                        </div>
+                        <div class="player-list" id="playerList">
+                            <div class="empty-state">ยังไม่มีผู้เล่น</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Panel - Match Control & Current Matches -->
+            <section class="panel main-panel">
+                <div class="panel-header">
+                    <h2>🎯 การแข่งขัน</h2>
+                    <div class="round-info">
+                        <span>รอบที่ <strong id="currentRound">1</strong></span>
+                        <span class="separator">|</span>
+                        <span>ทั้งหมด <strong id="totalRounds">0</strong> รอบ</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <!-- Match Controls -->
+                    <div class="match-controls">
+                        <button class="btn btn-large btn-success" onclick="generateRound()">
+                            <span class="icon">🎲</span> สร้างรอบใหม่
+                        </button>
+                        <button class="btn btn-large btn-primary" onclick="startNextMatch()">
+                            <span class="icon">▶️</span> เริ่มแมทช์ถัดไป
+                        </button>
+                        <button class="btn btn-large btn-warning" onclick="completeCurrentMatches()">
+                            <span class="icon">✅</span> จบแมทช์ปัจจุบัน
+                        </button>
+                    </div>
+
+                    <!-- Current Matches (Courts) -->
+                    <div class="current-matches">
+                        <h3>🏟️ คอร์ทกำลังแข่ง</h3>
+                        <div class="courts-grid" id="courtsGrid">
+                            <!-- Courts will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Queue -->
+                    <div class="match-queue">
+                        <h3>📋 คิวรอแข่ง</h3>
+                        <div class="queue-list" id="queueList">
+                            <div class="empty-state">ยังไม่มีคิว</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="match-stats">
+                        <div class="stat-card" onclick="showPlayerStats()">
+                            <span class="stat-icon">🎮</span>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalMatches">0</span>
+                                <span class="stat-label">แมทช์ทั้งหมด</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">✅</span>
+                            <div class="stat-info">
+                                <span class="stat-value" id="completedMatches">0</span>
+                                <span class="stat-label">แข่งแล้ว</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">⏳</span>
+                            <div class="stat-info">
+                                <span class="stat-value" id="pendingMatches">0</span>
+                                <span class="stat-label">รอแข่ง</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">�</span>
+                            <div class="stat-info">
+                                <span class="stat-value" id="restingPlayers">0</span>
+                                <span class="stat-label">พักผ่อน</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel - Schedule -->
+            <aside class="panel schedule-panel">
+                <div class="panel-header">
+                    <h2>📅 ตารางการแข่ง</h2>
+                    <div class="schedule-filter">
+                        <select id="scheduleFilter" onchange="filterSchedule(this.value)">
+                            <option value="all">ทั้งหมด</option>
+                            <option value="pending">รอแข่ง</option>
+                            <option value="playing">กำลังแข่ง</option>
+                            <option value="completed">แข่งแล้ว</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="schedule-list" id="scheduleList">
+                        <div class="empty-state">ยังไม่มีตารางแข่ง</div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Player Statistics Modal -->
+        <div class="modal" id="playerStatsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📊 สถิติผู้เล่น</h2>
+                    <button class="modal-close" onclick="closeModal('playerStatsModal')">&times;</button>
+                </div>
+                <div class="modal-body" id="playerStatsContent">
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Modal -->
+        <div class="modal" id="importModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📥 นำเข้าข้อมูล</h2>
+                    <button class="modal-close" onclick="closeModal('importModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="importData" placeholder="วางข้อมูล JSON ที่นี่..."></textarea>
+                    <button class="btn btn-primary" onclick="doImport()">นำเข้า</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Input Modal -->
+        <div class="modal" id="scoreModal">
+            <div class="modal-content modal-sm">
+                <div class="modal-header">
+                    <h2>🏆 บันทึกคะแนน</h2>
+                    <button class="modal-close" onclick="closeModal('scoreModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="score-input-container">
+                        <div class="score-team">
+                            <span class="score-team-label" id="scoreTeam1Label">ทีม A</span>
+                            <div class="score-inputs">
+                                <input type="number" id="score1Set1" min="0" max="30" value="0">
+                                <input type="number" id="score1Set2" min="0" max="30" value="0">
+                                <input type="number" id="score1Set3" min="0" max="30" value="0">
+                            </div>
+                        </div>
+                        <div class="score-vs">VS</div>
+                        <div class="score-team">
+                            <span class="score-team-label" id="scoreTeam2Label">ทีม B</span>
+                            <div class="score-inputs">
+                                <input type="number" id="score2Set1" min="0" max="30" value="0">
+                                <input type="number" id="score2Set2" min="0" max="30" value="0">
+                                <input type="number" id="score2Set3" min="0" max="30" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="score-set-labels">
+                        <span>Set 1</span>
+                        <span>Set 2</span>
+                        <span>Set 3</span>
+                    </div>
+                    <input type="hidden" id="scoreMatchId">
+                    <button class="btn btn-success" onclick="saveScore()" style="width: 100%; margin-top: 1rem;">💾
+                        บันทึกและจบแมทช์</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Add Players Modal -->
+        <div class="modal" id="bulkAddModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>👥 เพิ่มผู้เล่นหลายคน</h2>
+                    <button class="modal-close" onclick="closeModal('bulkAddModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-hint">ใส่ชื่อผู้เล่น 1 ชื่อต่อบรรทัด (ระดับเริ่มต้น: มือใหม่)</p>
+                    <textarea id="bulkPlayerNames" placeholder="สมชาย
+สมศรี
+วิชัย
+มานี"></textarea>
+                    <div class="bulk-add-options">
+                        <label>ระดับเริ่มต้น:</label>
+                        <select id="bulkPlayerLevel">
+                            <option value="beginner">🟢 มือใหม่</option>
+                            <option value="intermediate">🟡 ปานกลาง</option>
+                            <option value="advanced">🟠 ขั้นสูง</option>
+                            <option value="pro">🔴 โปร</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" onclick="bulkAddPlayers()" style="width: 100%; margin-top: 1rem;">➕
+                        เพิ่มทั้งหมด</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player History Modal -->
+        <div class="modal" id="playerHistoryModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📜 ประวัติการแข่ง</h2>
+                    <button class="modal-close" onclick="closeModal('playerHistoryModal')">&times;</button>
+                </div>
+                <div class="modal-body" id="playerHistoryContent">
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
