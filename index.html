@@ -373,6 +373,81 @@
             </div>
         </div>
 
+        <!-- Floating Rental Timer Widget -->
+        <div class="rental-timer-widget" id="rentalTimerWidget">
+            <!-- Minimized View -->
+            <div class="rental-timer-mini" id="rentalTimerMini" onclick="expandRentalTimer()">
+                <span class="rental-mini-icon">⏱️</span>
+                <span class="rental-mini-time" id="rentalTimerMiniDisplay">02:00:00</span>
+                <button class="rental-mini-btn" onclick="event.stopPropagation(); closeRentalTimer()"
+                    title="ปิด">✕</button>
+            </div>
+
+            <!-- Expanded View -->
+            <div class="rental-timer-expanded" id="rentalTimerExpanded">
+                <div class="rental-timer-section" id="rentalTimerContainer">
+                    <div class="rental-timer-header">
+                        <h3>⏱️ เวลาเช่าคอร์ท</h3>
+                        <div class="rental-timer-actions">
+                            <button class="rental-action-btn" onclick="minimizeRentalTimer()" title="ย่อ">➖</button>
+                            <button class="rental-action-btn" onclick="closeRentalTimer()" title="ปิด">✕</button>
+                        </div>
+                    </div>
+                    <div class="rental-timer-settings">
+                        <div class="rental-mode-toggle">
+                            <button class="rental-mode-btn active" id="modeDurationBtn"
+                                onclick="setRentalMode('duration')">
+                                ⏱️ จับเวลา
+                            </button>
+                            <button class="rental-mode-btn" id="modeEndTimeBtn" onclick="setRentalMode('endtime')">
+                                🕐 เวลาสิ้นสุด
+                            </button>
+                        </div>
+                        <div class="rental-input-row" id="durationInputRow">
+                            <label>ตั้งเวลา:</label>
+                            <input type="number" id="rentalDurationHours" value="2" min="0" max="8"
+                                onchange="updateDurationFromInputs()" title="ชั่วโมง">
+                            <span class="rental-unit">ชม.</span>
+                            <input type="number" id="rentalDurationMinutes" value="0" min="0" max="59"
+                                onchange="updateDurationFromInputs()" title="นาที">
+                            <span class="rental-unit">นาที</span>
+                        </div>
+                        <div class="rental-input-row" id="endTimeInputRow" style="display: none;">
+                            <label>สิ้นสุดเวลา:</label>
+                            <input type="time" id="rentalEndTime" value="18:00" onchange="setRentalEndTime(this.value)">
+                            <span class="rental-unit">น.</span>
+                        </div>
+                    </div>
+                    <div class="rental-timer-display">
+                        <span class="rental-time" id="rentalTimerDisplay">02:00:00</span>
+                        <div class="rental-end-time-label" id="rentalEndTimeLabel" style="display: none;">
+                            จบเวลา: <span id="rentalEndTimeValue">18:00</span> น.
+                        </div>
+                    </div>
+                    <div class="rental-timer-progress-bar">
+                        <div class="rental-timer-progress" id="rentalTimerProgress"></div>
+                    </div>
+                    <div class="rental-timer-controls">
+                        <button class="btn btn-success" id="rentalStartBtn" onclick="startRentalTimer()">
+                            <span class="icon">▶️</span> เริ่ม
+                        </button>
+                        <button class="btn btn-warning" id="rentalPauseBtn" onclick="pauseRentalTimer()"
+                            style="display: none;">
+                            <span class="icon">⏸️</span> หยุด
+                        </button>
+                        <button class="btn btn-outline" onclick="resetRentalTimer()">
+                            <span class="icon">🔄</span> รีเซ็ต
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Timer Toggle Button -->
+        <button class="rental-timer-toggle" id="rentalTimerToggle" onclick="openRentalTimer()" title="เวลาเช่าคอร์ท">
+            ⏱️
+        </button>
+
         <!-- Toast Container -->
         <div class="toast-container" id="toastContainer"></div>
     </div>

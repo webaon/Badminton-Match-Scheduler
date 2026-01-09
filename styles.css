@@ -1817,3 +1817,415 @@ body {
 .switch input:focus+.switch-slider {
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
+
+/* ============================================
+   Rental Timer
+   ============================================ */
+.rental-timer-section {
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all var(--transition-normal);
+}
+
+.rental-timer-section.warning {
+    border-color: var(--warning);
+    box-shadow: 0 0 20px rgba(253, 203, 110, 0.3);
+}
+
+.rental-timer-section.danger {
+    border-color: var(--danger);
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+    animation: pulse-danger 1s infinite;
+}
+
+.rental-timer-section.expired {
+    border-color: var(--danger);
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), var(--bg-secondary));
+}
+
+@keyframes pulse-danger {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+    }
+}
+
+.rental-timer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.rental-timer-header h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.rental-timer-settings {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rental-timer-settings input {
+    width: 70px;
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.rental-timer-settings input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.rental-unit {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.rental-timer-display {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.rental-time {
+    font-size: 3.5rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, var(--success), var(--accent-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+}
+
+.rental-timer-section.warning .rental-time {
+    background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.rental-timer-section.danger .rental-time,
+.rental-timer-section.expired .rental-time {
+    background: linear-gradient(135deg, var(--danger), #ff4444);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.rental-timer-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.rental-timer-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--accent-primary));
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.rental-timer-section.warning .rental-timer-progress {
+    background: linear-gradient(90deg, var(--warning), var(--warning-dark));
+}
+
+.rental-timer-section.danger .rental-timer-progress,
+.rental-timer-section.expired .rental-timer-progress {
+    background: linear-gradient(90deg, var(--danger), #ff4444);
+}
+
+.rental-timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.rental-timer-controls .btn {
+    min-width: 100px;
+}
+
+/* ============================================
+   Floating Rental Timer Widget
+   ============================================ */
+.rental-timer-widget {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 999;
+    display: none;
+}
+
+.rental-timer-widget.show {
+    display: block;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.rental-timer-expanded {
+    width: 320px;
+}
+
+.rental-timer-expanded .rental-timer-section {
+    margin-bottom: 0;
+    box-shadow: var(--shadow-lg);
+}
+
+.rental-timer-expanded .rental-timer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rental-timer-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.rental-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--bg-primary);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.rental-action-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.rental-timer-expanded .rental-timer-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.rental-mode-toggle {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.rental-mode-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.rental-mode-btn:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.rental-mode-btn.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.rental-input-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.rental-input-row label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.rental-input-row input[type="number"] {
+    width: 55px;
+    padding: 0.4rem 0.5rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.rental-input-row input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.rental-input-row input[type="time"] {
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.rental-input-row input[type="time"]:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.rental-timer-expanded .rental-timer-display {
+    margin: 1rem 0;
+}
+
+.rental-timer-expanded .rental-time {
+    font-size: 2.5rem;
+}
+
+.rental-end-time-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.rental-end-time-label span {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+/* Mini View */
+.rental-timer-mini {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.rental-timer-mini:hover {
+    border-color: var(--accent-primary);
+    transform: scale(1.02);
+}
+
+.rental-timer-mini.warning {
+    border-color: var(--warning);
+}
+
+.rental-timer-mini.danger {
+    border-color: var(--danger);
+    animation: pulse-danger 1s infinite;
+}
+
+.rental-mini-icon {
+    font-size: 1.5rem;
+}
+
+.rental-mini-time {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: var(--text-primary);
+}
+
+.rental-timer-mini.warning .rental-mini-time {
+    color: var(--warning);
+}
+
+.rental-timer-mini.danger .rental-mini-time {
+    color: var(--danger);
+}
+
+.rental-mini-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-primary);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.rental-mini-btn:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Toggle Button */
+.rental-timer-toggle {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-primary), #5a4bd1);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg), 0 0 20px var(--accent-glow);
+    transition: all var(--transition-normal);
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rental-timer-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg), 0 0 30px var(--accent-glow);
+}
+
+.rental-timer-toggle.hidden {
+    display: none;
+}

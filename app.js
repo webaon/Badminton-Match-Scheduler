@@ -19,7 +19,16 @@ const state = {
         courtCount: 2,
         multiCourt: false // Can a player play on multiple courts at once
     },
-    currentRound: 0
+    currentRound: 0,
+    rentalTimer: {
+        mode: 'duration', // 'duration' or 'endtime'
+        duration: 120, // minutes (default 2 hours)
+        endTime: '18:00', // end time for endtime mode
+        remainingSeconds: 7200, // 2 hours in seconds
+        isRunning: false,
+        alertsShown: { min15: false, min10: false, min5: false },
+        widgetState: 'closed' // 'closed', 'expanded', 'minimized'
+    }
 };
 
 // Level weights for balancing
@@ -1486,4 +1495,446 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
     }
+});
+
+// ============================================
+// Rental Timer Functions
+// ============================================
+
+let rentalTimerInterval = null;
+
+function setRentalDuration(minutes) {
+    const duration = parseInt(minutes) || 120;
+    state.rentalTimer.duration = duration;
+    state.rentalTimer.remainingSeconds = duration * 60;
+    state.rentalTimer.alertsShown = { min15: false, min10: false, min5: false };
+    updateRentalTimerDisplay();
+    updateDurationInputs();
+    saveToStorage();
+}
+
+function updateDurationFromInputs() {
+    const hoursInput = document.getElementById('rentalDurationHours');
+    const minutesInput = document.getElementById('rentalDurationMinutes');
+
+    const hours = parseInt(hoursInput?.value) || 0;
+    const minutes = parseInt(minutesInput?.value) || 0;
+
+    const totalMinutes = (hours * 60) + minutes;
+    if (totalMinutes > 0) {
+        state.rentalTimer.duration = totalMinutes;
+        state.rentalTimer.remainingSeconds = totalMinutes * 60;
+        state.rentalTimer.alertsShown = { min15: false, min10: false, min5: false };
+        updateRentalTimerDisplay();
+        saveToStorage();
+    }
+}
+
+function updateDurationInputs() {
+    const hoursInput = document.getElementById('rentalDurationHours');
+    const minutesInput = document.getElementById('rentalDurationMinutes');
+
+    if (hoursInput && minutesInput) {
+        const totalMinutes = state.rentalTimer.duration;
+        hoursInput.value = Math.floor(totalMinutes / 60);
+        minutesInput.value = totalMinutes % 60;
+    }
+}
+
+function setRentalMode(mode) {
+    state.rentalTimer.mode = mode;
+
+    const durationBtn = document.getElementById('modeDurationBtn');
+    const endTimeBtn = document.getElementById('modeEndTimeBtn');
+    const durationRow = document.getElementById('durationInputRow');
+    const endTimeRow = document.getElementById('endTimeInputRow');
+    const endTimeLabel = document.getElementById('rentalEndTimeLabel');
+    const endTimeValue = document.getElementById('rentalEndTimeValue');
+
+    if (mode === 'duration') {
+        if (durationBtn) durationBtn.classList.add('active');
+        if (endTimeBtn) endTimeBtn.classList.remove('active');
+        if (durationRow) durationRow.style.display = 'flex';
+        if (endTimeRow) endTimeRow.style.display = 'none';
+        if (endTimeLabel) endTimeLabel.style.display = 'none';
+        // Recalculate from duration
+        setRentalDuration(state.rentalTimer.duration);
+    } else {
+        if (durationBtn) durationBtn.classList.remove('active');
+        if (endTimeBtn) endTimeBtn.classList.add('active');
+        if (durationRow) durationRow.style.display = 'none';
+        if (endTimeRow) endTimeRow.style.display = 'flex';
+        if (endTimeLabel) endTimeLabel.style.display = 'block';
+        if (endTimeValue) endTimeValue.textContent = state.rentalTimer.endTime;
+        // Calculate from end time
+        setRentalEndTime(state.rentalTimer.endTime);
+    }
+
+    saveToStorage();
+}
+
+function setRentalEndTime(timeStr) {
+    state.rentalTimer.endTime = timeStr;
+
+    const now = new Date();
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const endTime = new Date();
+    endTime.setHours(hours, minutes, 0, 0);
+
+    // If end time is before now, assume next day
+    if (endTime <= now) {
+        endTime.setDate(endTime.getDate() + 1);
+    }
+
+    const diffSeconds = Math.floor((endTime - now) / 1000);
+    state.rentalTimer.remainingSeconds = Math.max(0, diffSeconds);
+    state.rentalTimer.duration = Math.ceil(diffSeconds / 60);
+    state.rentalTimer.alertsShown = { min15: false, min10: false, min5: false };
+
+    updateRentalTimerDisplay();
+    saveToStorage();
+}
+
+function startRentalTimer() {
+    if (state.rentalTimer.isRunning) return;
+
+    // For end time mode, recalculate remaining time before starting
+    if (state.rentalTimer.mode === 'endtime') {
+        recalculateEndTimeRemaining();
+    }
+
+    state.rentalTimer.isRunning = true;
+    saveToStorage();
+    updateRentalTimerButtons();
+
+    rentalTimerInterval = setInterval(() => {
+        // For end time mode, sync with real time every tick
+        if (state.rentalTimer.mode === 'endtime') {
+            recalculateEndTimeRemaining();
+        } else {
+            state.rentalTimer.remainingSeconds--;
+        }
+
+        if (state.rentalTimer.remainingSeconds > 0) {
+            updateRentalTimerDisplay();
+            checkRentalTimeAlerts();
+
+            // Save every 30 seconds
+            if (state.rentalTimer.remainingSeconds % 30 === 0) {
+                saveToStorage();
+            }
+        } else {
+            stopRentalTimer();
+            onRentalTimeExpired();
+        }
+    }, 1000);
+
+    showToast('เริ่มจับเวลาเช่าคอร์ท', 'success');
+}
+
+function recalculateEndTimeRemaining() {
+    const now = new Date();
+    const [hours, minutes] = state.rentalTimer.endTime.split(':').map(Number);
+    const endTime = new Date();
+    endTime.setHours(hours, minutes, 0, 0);
+
+    // If end time is before now, assume next day
+    if (endTime <= now) {
+        endTime.setDate(endTime.getDate() + 1);
+    }
+
+    const diffSeconds = Math.floor((endTime - now) / 1000);
+    state.rentalTimer.remainingSeconds = Math.max(0, diffSeconds);
+}
+
+function pauseRentalTimer() {
+    if (!state.rentalTimer.isRunning) return;
+
+    state.rentalTimer.isRunning = false;
+    clearInterval(rentalTimerInterval);
+    rentalTimerInterval = null;
+    saveToStorage();
+    updateRentalTimerButtons();
+    showToast('หยุดจับเวลาชั่วคราว', 'info');
+}
+
+function stopRentalTimer() {
+    state.rentalTimer.isRunning = false;
+    clearInterval(rentalTimerInterval);
+    rentalTimerInterval = null;
+    updateRentalTimerButtons();
+}
+
+function resetRentalTimer() {
+    stopRentalTimer();
+
+    if (state.rentalTimer.mode === 'endtime') {
+        recalculateEndTimeRemaining();
+    } else {
+        state.rentalTimer.remainingSeconds = state.rentalTimer.duration * 60;
+    }
+
+    state.rentalTimer.alertsShown = { min15: false, min10: false, min5: false };
+    saveToStorage();
+    updateRentalTimerDisplay();
+    showToast('รีเซ็ตเวลาเรียบร้อย', 'info');
+}
+
+function updateRentalTimerDisplay() {
+    const remaining = state.rentalTimer.remainingSeconds;
+    const total = state.rentalTimer.duration * 60;
+
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
+
+    const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    const displayEl = document.getElementById('rentalTimerDisplay');
+    const progressEl = document.getElementById('rentalTimerProgress');
+    const containerEl = document.getElementById('rentalTimerContainer');
+
+    if (displayEl) {
+        displayEl.textContent = timeString;
+    }
+
+    if (progressEl) {
+        const progressPercent = ((total - remaining) / total) * 100;
+        progressEl.style.width = `${progressPercent}%`;
+    }
+
+    if (containerEl) {
+        containerEl.classList.remove('warning', 'danger', 'expired');
+        if (remaining === 0) {
+            containerEl.classList.add('expired');
+        } else if (remaining <= 300) { // 5 minutes
+            containerEl.classList.add('danger');
+        } else if (remaining <= 900) { // 15 minutes
+            containerEl.classList.add('warning');
+        }
+    }
+}
+
+function updateRentalTimerButtons() {
+    const startBtn = document.getElementById('rentalStartBtn');
+    const pauseBtn = document.getElementById('rentalPauseBtn');
+
+    if (startBtn && pauseBtn) {
+        if (state.rentalTimer.isRunning) {
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-flex';
+        } else {
+            startBtn.style.display = 'inline-flex';
+            pauseBtn.style.display = 'none';
+        }
+    }
+}
+
+function checkRentalTimeAlerts() {
+    const remaining = state.rentalTimer.remainingSeconds;
+    const alerts = state.rentalTimer.alertsShown;
+
+    if (remaining === 900 && !alerts.min15) {
+        alerts.min15 = true;
+        showToast('⚠️ เหลือเวลาเช่าคอร์ท 15 นาที', 'warning');
+    } else if (remaining === 600 && !alerts.min10) {
+        alerts.min10 = true;
+        showToast('⚠️ เหลือเวลาเช่าคอร์ท 10 นาที', 'warning');
+    } else if (remaining === 300 && !alerts.min5) {
+        alerts.min5 = true;
+        showToast('🚨 เหลือเวลาเช่าคอร์ท 5 นาที!', 'error');
+    }
+}
+
+function onRentalTimeExpired() {
+    showToast('⏰ หมดเวลาเช่าคอร์ทแล้ว!', 'error');
+
+    // Play alert sound - beep 3 times
+    playAlertSound(3);
+}
+
+function playAlertSound(times = 1) {
+    let count = 0;
+    const playBeep = () => {
+        if (count >= times) return;
+        count++;
+
+        try {
+            // Create audio context for better sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 880; // A5 note
+            oscillator.type = 'sine';
+            gainNode.gain.value = 0.3;
+
+            oscillator.start();
+
+            // Stop after 200ms
+            setTimeout(() => {
+                oscillator.stop();
+                audioContext.close();
+
+                // Play next beep after 300ms pause
+                if (count < times) {
+                    setTimeout(playBeep, 300);
+                }
+            }, 200);
+        } catch (e) {
+            console.log('Audio not supported');
+        }
+    };
+
+    playBeep();
+}
+
+function initRentalTimer() {
+    // Set input values from state
+    updateDurationInputs();
+
+    const endTimeInput = document.getElementById('rentalEndTime');
+
+    if (endTimeInput && state.rentalTimer.endTime) {
+        endTimeInput.value = state.rentalTimer.endTime;
+    }
+
+    // Set mode UI
+    setRentalMode(state.rentalTimer.mode || 'duration');
+
+    // For end time mode, recalculate remaining time
+    if (state.rentalTimer.mode === 'endtime' && !state.rentalTimer.isRunning) {
+        recalculateEndTimeRemaining();
+    }
+
+    updateRentalTimerDisplay();
+    updateRentalTimerButtons();
+
+    // Restore widget state
+    if (state.rentalTimer.widgetState === 'expanded') {
+        openRentalTimer();
+    } else if (state.rentalTimer.widgetState === 'minimized') {
+        openRentalTimer();
+        minimizeRentalTimer();
+    }
+
+    // Resume timer if it was running
+    if (state.rentalTimer.isRunning) {
+        state.rentalTimer.isRunning = false; // Reset so startRentalTimer works
+        startRentalTimer();
+    }
+}
+
+// Widget visibility functions
+function openRentalTimer() {
+    const widget = document.getElementById('rentalTimerWidget');
+    const toggle = document.getElementById('rentalTimerToggle');
+    const expanded = document.getElementById('rentalTimerExpanded');
+    const mini = document.getElementById('rentalTimerMini');
+
+    if (widget && toggle) {
+        widget.classList.add('show');
+        widget.classList.remove('minimized');
+        toggle.classList.add('hidden');
+        if (expanded) expanded.style.display = 'block';
+        if (mini) mini.style.display = 'none';
+
+        // Save widget state
+        state.rentalTimer.widgetState = 'expanded';
+        saveToStorage();
+    }
+}
+
+function closeRentalTimer() {
+    const widget = document.getElementById('rentalTimerWidget');
+    const toggle = document.getElementById('rentalTimerToggle');
+
+    if (widget && toggle) {
+        widget.classList.remove('show', 'minimized');
+        toggle.classList.remove('hidden');
+
+        // Save widget state
+        state.rentalTimer.widgetState = 'closed';
+        saveToStorage();
+    }
+}
+
+function minimizeRentalTimer() {
+    const widget = document.getElementById('rentalTimerWidget');
+    const expanded = document.getElementById('rentalTimerExpanded');
+    const mini = document.getElementById('rentalTimerMini');
+
+    if (widget) {
+        widget.classList.add('minimized');
+        if (expanded) expanded.style.display = 'none';
+        if (mini) mini.style.display = 'flex';
+
+        // Save widget state
+        state.rentalTimer.widgetState = 'minimized';
+        saveToStorage();
+    }
+}
+
+function expandRentalTimer() {
+    const widget = document.getElementById('rentalTimerWidget');
+    const expanded = document.getElementById('rentalTimerExpanded');
+    const mini = document.getElementById('rentalTimerMini');
+
+    if (widget) {
+        widget.classList.remove('minimized');
+        if (expanded) expanded.style.display = 'block';
+        if (mini) mini.style.display = 'none';
+
+        // Save widget state
+        state.rentalTimer.widgetState = 'expanded';
+        saveToStorage();
+    }
+}
+
+// Override updateRentalTimerDisplay to also update mini display
+const originalUpdateRentalTimerDisplay = updateRentalTimerDisplay;
+updateRentalTimerDisplay = function () {
+    const remaining = state.rentalTimer.remainingSeconds;
+    const total = state.rentalTimer.duration * 60;
+
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
+
+    const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    const displayEl = document.getElementById('rentalTimerDisplay');
+    const miniDisplayEl = document.getElementById('rentalTimerMiniDisplay');
+    const progressEl = document.getElementById('rentalTimerProgress');
+    const containerEl = document.getElementById('rentalTimerContainer');
+    const widgetEl = document.getElementById('rentalTimerWidget');
+    const miniEl = document.getElementById('rentalTimerMini');
+
+    if (displayEl) displayEl.textContent = timeString;
+    if (miniDisplayEl) miniDisplayEl.textContent = timeString;
+
+    if (progressEl) {
+        const progressPercent = ((total - remaining) / total) * 100;
+        progressEl.style.width = `${progressPercent}%`;
+    }
+
+    // Update status classes
+    const statusClass = remaining === 0 ? 'expired' :
+        remaining <= 300 ? 'danger' :
+            remaining <= 900 ? 'warning' : '';
+
+    [containerEl, widgetEl, miniEl].forEach(el => {
+        if (el) {
+            el.classList.remove('warning', 'danger', 'expired');
+            if (statusClass) el.classList.add(statusClass);
+        }
+    });
+};
+
+// Initialize rental timer on page load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initRentalTimer, 100);
 });
