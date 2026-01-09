@@ -1716,3 +1716,104 @@ body {
     border-color: var(--level-pro);
     color: var(--level-pro);
 }
+
+/* ============================================
+   Toggle Switch
+   ============================================ */
+.switch-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.switch-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.switch-slider {
+    width: 52px;
+    height: 28px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: 50px;
+    transition: all var(--transition-normal);
+    position: relative;
+}
+
+.switch-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: all var(--transition-normal);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked+.switch-slider {
+    background: linear-gradient(135deg, var(--success), #00c49a);
+    border-color: var(--success);
+}
+
+.switch input:checked+.switch-slider::before {
+    transform: translateX(24px);
+    background: white;
+}
+
+.switch-text {
+    position: absolute;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all var(--transition-fast);
+    pointer-events: none;
+}
+
+.switch-text.on {
+    left: 6px;
+    color: white;
+    opacity: 0;
+}
+
+.switch-text.off {
+    right: 6px;
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+.switch input:checked~.switch-text.on {
+    opacity: 1;
+}
+
+.switch input:checked~.switch-text.off {
+    opacity: 0;
+}
+
+.switch:hover .switch-slider {
+    border-color: var(--accent-primary);
+}
+
+.switch input:focus+.switch-slider {
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}

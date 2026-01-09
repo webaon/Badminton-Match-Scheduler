@@ -76,51 +76,41 @@
                                 onchange="saveSetting('courtCount', this.value)">
                             <button onclick="adjustCourts(1)">+</button>
                         </div>
-                    </div>
 
-                    <!-- Players per match on multiple courts -->
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="multiCourt" onchange="saveSetting('multiCourt', this.checked)">
-                            อนุญาตลงหลายคอร์ทพร้อมกัน <button class="info-btn"
-                                onclick="event.preventDefault(); showMultiCourtInfo()" title="ดูเงื่อนไข">ℹ️</button>
-                        </label>
-                    </div>
+                        <hr class="divider">
 
-                    <hr class="divider">
+                        <!-- Add Player -->
+                        <div class="form-group">
+                            <label>เพิ่มผู้เล่น</label>
+                            <div class="add-player-form">
+                                <input type="text" id="playerName" placeholder="ชื่อผู้เล่น"
+                                    onkeypress="handlePlayerKeypress(event)">
+                                <select id="playerLevel">
+                                    <option value="beginner">🟢 มือใหม่</option>
+                                    <option value="intermediate">🟡 ปานกลาง</option>
+                                    <option value="advanced">🟠 ขั้นสูง</option>
+                                    <option value="pro">🔴 โปร</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="addPlayer()">
+                                    <span class="icon">➕</span> เพิ่ม
+                                </button>
+                                <button class="btn btn-outline" onclick="openBulkAddModal()" title="เพิ่มหลายคน">
+                                    <span class="icon">👥</span>
+                                </button>
+                            </div>
+                        </div>
 
-                    <!-- Add Player -->
-                    <div class="form-group">
-                        <label>เพิ่มผู้เล่น</label>
-                        <div class="add-player-form">
-                            <input type="text" id="playerName" placeholder="ชื่อผู้เล่น"
-                                onkeypress="handlePlayerKeypress(event)">
-                            <select id="playerLevel">
-                                <option value="beginner">🟢 มือใหม่</option>
-                                <option value="intermediate">🟡 ปานกลาง</option>
-                                <option value="advanced">🟠 ขั้นสูง</option>
-                                <option value="pro">🔴 โปร</option>
-                            </select>
-                            <button class="btn btn-primary" onclick="addPlayer()">
-                                <span class="icon">➕</span> เพิ่ม
-                            </button>
-                            <button class="btn btn-outline" onclick="openBulkAddModal()" title="เพิ่มหลายคน">
-                                <span class="icon">👥</span>
-                            </button>
+                        <!-- Player List -->
+                        <div class="player-list-container">
+                            <div class="player-list-header">
+                                <h3>👥 รายชื่อผู้เล่น (<span id="playerCount">0</span>)</h3>
+                                <div class="player-stats" id="playerStats"></div>
+                            </div>
+                            <div class="player-list" id="playerList">
+                                <div class="empty-state">ยังไม่มีผู้เล่น</div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Player List -->
-                    <div class="player-list-container">
-                        <div class="player-list-header">
-                            <h3>👥 รายชื่อผู้เล่น (<span id="playerCount">0</span>)</h3>
-                            <div class="player-stats" id="playerStats"></div>
-                        </div>
-                        <div class="player-list" id="playerList">
-                            <div class="empty-state">ยังไม่มีผู้เล่น</div>
-                        </div>
-                    </div>
-                </div>
             </aside>
 
             <!-- Center Panel - Match Control & Current Matches -->
@@ -376,36 +366,6 @@
                                 <li>ทุกรูปแบบจะให้ความสำคัญกับผู้เล่นที่แข่งน้อยครั้งก่อน</li>
                                 <li><strong>ประเภทคู่:</strong> ต้องการ 4 คนต่อแมตช์</li>
                                 <li><strong>ประเภทเดี่ยว:</strong> ต้องการ 2 คนต่อแมตช์</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Multi Court Info Modal -->
-        <div class="modal" id="multiCourtInfoModal">
-            <div class="modal-content modal-sm">
-                <div class="modal-header">
-                    <h2>🏟️ อนุญาตลงหลายคอร์ทพร้อมกัน</h2>
-                    <button class="modal-close" onclick="closeModal('multiCourtInfoModal')">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="pairing-info-content">
-                        <div class="pairing-info-section" style="border-left-color: var(--success);">
-                            <h3>✅ เมื่อเปิด</h3>
-                            <ul>
-                                <li>ผู้เล่นสามารถลงแข่งหลายคอร์ทพร้อมกันได้</li>
-                                <li>เหมาะกับกรณีที่มีผู้เล่นน้อยแต่มีหลายคอร์ท</li>
-                            </ul>
-                        </div>
-                        <hr class="divider">
-                        <div class="pairing-info-section" style="border-left-color: var(--danger);">
-                            <h3>❌ เมื่อปิด (ค่าเริ่มต้น)</h3>
-                            <ul>
-                                <li>ผู้เล่นสามารถลงแข่งได้เพียงคอร์ทเดียว</li>
-                                <li>ถ้ากำลังเล่นอยู่ จะไม่ถูกเลือกให้ลงแมตช์ใหม่</li>
-                                <li>เหมาะกับการแข่งขันปกติ</li>
                             </ul>
                         </div>
                     </div>
