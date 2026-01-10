@@ -224,15 +224,38 @@ function editPlayer(id) {
     const player = state.players.find(p => p.id === id);
     if (!player) return;
 
-    const newName = prompt('แก้ไขชื่อผู้เล่น:', player.name);
-    if (newName && newName.trim()) {
-        player.name = newName.trim();
-        saveToStorage();
-        renderPlayers();
-        renderCourts();
-        renderSchedule();
-        showToast('แก้ไขเรียบร้อย', 'success');
+    // Set modal values
+    document.getElementById('editPlayerId').value = player.id;
+    document.getElementById('editPlayerName').value = player.name;
+    document.getElementById('editPlayerLevel').value = player.level;
+
+    // Show modal
+    document.getElementById('editPlayerModal').classList.add('show');
+}
+
+function saveEditPlayer() {
+    const id = document.getElementById('editPlayerId').value;
+    const newName = document.getElementById('editPlayerName').value.trim();
+    const newLevel = document.getElementById('editPlayerLevel').value;
+
+    if (!newName) {
+        showToast('กรุณากรอกชื่อผู้เล่น', 'error');
+        return;
     }
+
+    const player = state.players.find(p => p.id === id);
+    if (!player) return;
+
+    player.name = newName;
+    player.level = newLevel;
+
+    saveToStorage();
+    renderPlayers();
+    renderCourts();
+    renderSchedule();
+
+    closeModal('editPlayerModal');
+    showToast('แก้ไขข้อมูลผู้เล่นเรียบร้อย', 'success');
 }
 
 function changePlayerLevel(id, newLevel) {
