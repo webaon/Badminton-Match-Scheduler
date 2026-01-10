@@ -440,6 +440,25 @@ body {
 /* ============================================
    Player List
    ============================================ */
+.player-list-button-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.player-list-btn {
+    flex: 1;
+}
+
+.player-list-modal-stats {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
 .player-list-container {
     flex: 1;
     display: flex;
@@ -1142,6 +1161,77 @@ body {
     margin-top: 1.5rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border-color);
+}
+
+/* Add Player Modal Tabs */
+.add-player-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.add-player-tab {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.add-player-tab:hover {
+    background: var(--bg-hover);
+}
+
+.add-player-tab.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.add-player-content {
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+    min-height: 150px;
+    transition: border-color var(--transition-fast);
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.form-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.add-player-btn {
+    width: 100%;
 }
 
 /* ============================================

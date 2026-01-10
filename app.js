@@ -196,6 +196,89 @@ function addPlayer() {
     showToast(`เพิ่ม ${name} เรียบร้อย`, 'success');
 }
 
+function showAddPlayerModal() {
+    document.getElementById('addPlayerModal').classList.add('show');
+    document.getElementById('playerName').focus();
+}
+
+function switchAddPlayerTab(mode) {
+    const tabSingle = document.getElementById('tabSingle');
+    const tabBulk = document.getElementById('tabBulk');
+    const singleContent = document.getElementById('singleAddContent');
+    const bulkContent = document.getElementById('bulkAddContent');
+
+    if (mode === 'single') {
+        tabSingle.classList.add('active');
+        tabBulk.classList.remove('active');
+        singleContent.style.display = 'block';
+        bulkContent.style.display = 'none';
+        document.getElementById('playerName').focus();
+    } else {
+        tabSingle.classList.remove('active');
+        tabBulk.classList.add('active');
+        singleContent.style.display = 'none';
+        bulkContent.style.display = 'block';
+        document.getElementById('bulkPlayerNames').focus();
+    }
+}
+
+function addBulkPlayers() {
+    const namesText = document.getElementById('bulkPlayerNames').value.trim();
+    const level = document.getElementById('bulkPlayerLevel').value;
+
+    if (!namesText) {
+        showToast('กรุณากรอกรายชื่อผู้เล่น', 'error');
+        return;
+    }
+
+    const names = namesText.split('\n')
+        .map(name => name.trim())
+        .filter(name => name.length > 0);
+
+    if (names.length === 0) {
+        showToast('กรุณากรอกรายชื่อผู้เล่น', 'error');
+        return;
+    }
+
+    let addedCount = 0;
+    let skippedCount = 0;
+
+    names.forEach(name => {
+        // Check for duplicate
+        if (state.players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+            skippedCount++;
+            return;
+        }
+
+        const player = {
+            id: generateId(),
+            name: name,
+            level: level,
+            matchCount: 0,
+            isPlaying: false,
+            createdAt: new Date().toISOString()
+        };
+
+        state.players.push(player);
+        addedCount++;
+    });
+
+    if (addedCount > 0) {
+        saveToStorage();
+        renderPlayers();
+        updateStats();
+        document.getElementById('bulkPlayerNames').value = '';
+    }
+
+    if (addedCount > 0 && skippedCount > 0) {
+        showToast(`เพิ่ม ${addedCount} คน, ข้าม ${skippedCount} คน (ชื่อซ้ำ)`, 'info');
+    } else if (addedCount > 0) {
+        showToast(`เพิ่ม ${addedCount} คนเรียบร้อย`, 'success');
+    } else {
+        showToast('ไม่สามารถเพิ่มได้ (ชื่อซ้ำทั้งหมด)', 'error');
+    }
+}
+
 function handlePlayerKeypress(event) {
     if (event.key === 'Enter') {
         addPlayer();
@@ -543,19 +626,26 @@ function renderAll() {
 function renderPlayers() {
     const container = document.getElementById('playerList');
     const countEl = document.getElementById('playerCount');
+    const countModalEl = document.getElementById('playerCountModal');
     const statsEl = document.getElementById('playerStats');
+    const statsModalEl = document.getElementById('playerStatsModal');
 
-    countEl.textContent = state.players.length;
+    // Update counts in both places
+    if (countEl) countEl.textContent = state.players.length;
+    if (countModalEl) countModalEl.textContent = state.players.length;
 
     // Calculate level stats
     const levelCounts = { beginner: 0, intermediate: 0, advanced: 0, pro: 0 };
     state.players.forEach(p => levelCounts[p.level]++);
 
-    statsEl.innerHTML = Object.entries(levelCounts)
+    const statsHtml = Object.entries(levelCounts)
         .filter(([_, count]) => count > 0)
         .map(([level, count]) => `
             <span class="stat-badge" style="border-left: 3px solid var(--level-${level})">${count}</span>
         `).join('');
+
+    if (statsEl) statsEl.innerHTML = statsHtml;
+    if (statsModalEl) statsModalEl.innerHTML = statsHtml;
 
     if (state.players.length === 0) {
         container.innerHTML = '<div class="empty-state">ยังไม่มีผู้เล่น</div>';
@@ -875,6 +965,10 @@ function resetAll() {
 
 function closeModal(id) {
     document.getElementById(id).classList.remove('show');
+}
+
+function showPlayerListModal() {
+    document.getElementById('playerListModal').classList.add('show');
 }
 
 function showPlayerStats() {
