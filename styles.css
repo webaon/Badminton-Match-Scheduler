@@ -743,12 +743,35 @@ body {
 }
 
 .court-player {
-    padding: 0.25rem 0.75rem;
+    padding: 0.35rem 0.75rem;
+    padding-left: 0.6rem;
     background: var(--bg-tertiary);
-    border-radius: 20px;
+    border-radius: var(--radius-sm);
     font-size: 0.85rem;
     color: var(--text-primary);
     border: 1px solid var(--border-color);
+    border-left-width: 4px;
+    border-left-style: solid;
+}
+
+.court-player.level-beginner,
+.court-player.level-0 {
+    border-left-color: #00b894 !important;
+}
+
+.court-player.level-intermediate,
+.court-player.level-1 {
+    border-left-color: #fdcb6e !important;
+}
+
+.court-player.level-advanced,
+.court-player.level-2 {
+    border-left-color: #e17055 !important;
+}
+
+.court-player.level-pro,
+.court-player.level-3 {
+    border-left-color: #d63031 !important;
 }
 
 .court-vs {

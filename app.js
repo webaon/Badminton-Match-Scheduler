@@ -688,13 +688,13 @@ function renderCourts() {
 
     container.innerHTML = courts.map(court => {
         if (court.match) {
-            const team1Names = court.match.team1.map(id => {
+            const team1Players = court.match.team1.map(id => {
                 const p = state.players.find(pl => pl.id === id);
-                return p ? escapeHtml(p.name) : 'Unknown';
+                return p ? { name: escapeHtml(p.name), level: p.level } : { name: 'Unknown', level: 'beginner' };
             });
-            const team2Names = court.match.team2.map(id => {
+            const team2Players = court.match.team2.map(id => {
                 const p = state.players.find(pl => pl.id === id);
-                return p ? escapeHtml(p.name) : 'Unknown';
+                return p ? { name: escapeHtml(p.name), level: p.level } : { name: 'Unknown', level: 'beginner' };
             });
 
             return `
@@ -707,14 +707,14 @@ function renderCourts() {
                         <div class="court-team">
                             <span class="court-team-label">ทีม A</span>
                             <div class="court-team-players">
-                                ${team1Names.map(name => `<span class="court-player">${name}</span>`).join('')}
+                                ${team1Players.map(p => `<span class="court-player level-${p.level}">${p.name}</span>`).join('')}
                             </div>
                         </div>
                         <div class="court-vs">VS</div>
                         <div class="court-team">
                             <span class="court-team-label">ทีม B</span>
                             <div class="court-team-players">
-                                ${team2Names.map(name => `<span class="court-player">${name}</span>`).join('')}
+                                ${team2Players.map(p => `<span class="court-player level-${p.level}">${p.name}</span>`).join('')}
                             </div>
                         </div>
                     </div>
