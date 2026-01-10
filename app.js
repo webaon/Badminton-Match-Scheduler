@@ -75,10 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeUI() {
-    // Set form values from state
-    document.getElementById('courtCount').value = state.settings.courtCount;
-    document.getElementById('pairingMode').value = state.settings.pairingMode;
-    document.getElementById('multiCourt').checked = state.settings.multiCourt;
+    // Set form values from state - safely check for element existence
+    const courtCountEl = document.getElementById('courtCount');
+    const pairingModeEl = document.getElementById('pairingMode');
+    const multiCourtEl = document.getElementById('multiCourt');
+
+    if (courtCountEl) courtCountEl.value = state.settings.courtCount;
+    if (pairingModeEl) pairingModeEl.value = state.settings.pairingMode;
+    if (multiCourtEl) multiCourtEl.checked = state.settings.multiCourt;
 
     // Set match type buttons
     document.querySelectorAll('.btn-toggle[data-type]').forEach(btn => {
@@ -785,6 +789,12 @@ function resetAll() {
         return;
     }
 
+    // Clear interval if running
+    if (rentalTimerInterval) {
+        clearInterval(rentalTimerInterval);
+        rentalTimerInterval = null;
+    }
+
     state.players = [];
     state.matches = [];
     state.currentMatches = [];
@@ -797,10 +807,42 @@ function resetAll() {
         courtCount: 2,
         multiCourt: false
     };
+    state.rentalTimer = {
+        mode: 'duration',
+        duration: 120,
+        endTime: '18:00',
+        remainingSeconds: 7200,
+        isRunning: false,
+        alertsShown: { min15: false, min10: false, min5: false },
+        widgetState: 'closed'
+    };
 
+    // Clear localStorage completely
+    localStorage.removeItem('badmintonScheduler');
+
+    // Re-save fresh state
     saveToStorage();
+
+    // Re-initialize UI
     initializeUI();
     renderAll();
+
+    // Reset rental timer display
+    if (typeof updateDurationInputs === 'function') {
+        updateDurationInputs();
+    }
+    if (typeof updateRentalTimerDisplay === 'function') {
+        updateRentalTimerDisplay();
+    }
+    if (typeof updateRentalTimerButtons === 'function') {
+        updateRentalTimerButtons();
+    }
+
+    // Close rental timer widget
+    if (typeof closeRentalTimer === 'function') {
+        closeRentalTimer();
+    }
+
     showToast('ล้างข้อมูลเรียบร้อย', 'info');
 }
 
@@ -1705,6 +1747,20 @@ function resetRentalTimer() {
     if (state.rentalTimer.mode === 'endtime') {
         recalculateEndTimeRemaining();
     } else {
+        // In duration mode, ensure we reset to the current input values
+        const hoursInput = document.getElementById('rentalDurationHours');
+        const minutesInput = document.getElementById('rentalDurationMinutes');
+
+        if (hoursInput && minutesInput) {
+            const hours = parseInt(hoursInput.value) || 0;
+            const minutes = parseInt(minutesInput.value) || 0;
+            const totalMinutes = (hours * 60) + minutes;
+
+            if (totalMinutes > 0) {
+                state.rentalTimer.duration = totalMinutes;
+            }
+        }
+
         state.rentalTimer.remainingSeconds = state.rentalTimer.duration * 60;
     }
 
